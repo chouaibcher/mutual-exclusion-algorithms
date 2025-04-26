@@ -17,8 +17,8 @@ do{
 flag[0]=true;
 
 while(flag[1]){
-if(turn=1){ flag[0]=false;};
-chouaib: if (turn=1){goto chouaib;};
+if(turn==1){ flag[0]=false;};
+chouaib: if (turn==1){goto chouaib;};
 flag[0]=true;
 }
 criticalSection() ;
@@ -35,8 +35,8 @@ do{
 flag[1]=true;
 
 while(flag[0]){
-if(turn=0){ flag[1]=false;};
-chouaib: if (turn=0){goto chouaib;};
+if(turn==0){ flag[1]=false;};
+chouaib: if (turn==0){goto chouaib;};
 flag[1]=true;
 }
 criticalSection() ;
@@ -66,3 +66,4 @@ int main (void)
 /* Fin Normale du programme */
      return 0;
      }
+
