@@ -12,6 +12,7 @@ It demonstrates various synchronization techniques essential for building reliab
 | Improved Peterson's Algorithm     | Optimized version of Peterson's algorithm.         |
 | Flag-Based Mutex                  | Simple mutex using flags.                         |
 | Strict Alternation Mutex          | Alternating access to critical section.           |
+
 ## Why Mutual Exclusion?
 When multiple processes or threads attempt to access shared resources at the same time without coordination, it can cause **race conditions**, **deadlocks**, and **data inconsistency**.  
 These classical algorithms provide fundamental solutions to ensure that only one process accesses the critical section at a time.
@@ -54,5 +55,4 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 3. Commit your changes (`git commit -m 'Add some amazing feature'`)
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
-
 
