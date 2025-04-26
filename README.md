@@ -44,7 +44,7 @@ Each algorithm has different characteristics in terms of fairness, performance, 
 ## Requirements
 - GCC compiler
 - POSIX threads library (pthread)
-- Linux/Unix environment (tested on Ubuntu 22.04)
+- Linux/Unix environment
 
 ## Contributing
 Contributions are welcome! Please feel free to submit a Pull Request.
