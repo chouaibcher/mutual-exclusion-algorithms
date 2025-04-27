@@ -39,7 +39,7 @@ Each algorithm has different characteristics in terms of fairness, performance, 
 
 ## Technologies Used
 - C Programming Language
-- POSIX Threads (if applicable)
+- POSIX Threads
 - Standard Synchronization Techniques
 
 ## Requirements
