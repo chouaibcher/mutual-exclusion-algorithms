@@ -4,59 +4,92 @@
 #include <stdbool.h>
 #include <unistd.h>
 
-//Algo 2
-int x=0;
+// Shared variable between threads
+int x = 0;
+
+// Flags to indicate if a thread wants to enter the critical section
 bool flag[2];
 
-void* criticalSection(){
-	x++;
-	}
-
-void* Thread1(void* arg)
+// Critical section function
+void *criticalSection()
 {
-do{
-label:
-	if (flag[1]){ goto label;} 
-flag[0]=true;   
-criticalSection() ;
-printf("thread 1 : %d \n",x);
-sleep(1);
-
-flag[0]=false;
-}while(x<10);
+    // Increment the shared variable
+    x++;
 }
 
-void* Thread2(void* arg)
+// Thread 1 function
+void *Thread1(void *arg)
 {
-do{
-label:
-if (flag[0]){
-	goto label;}
-flag[1]=true;
- criticalSection();
- printf("thread 2 : %d \n",x);
-sleep(1);
+    do
+    {
+    wait_for_thread2:
+        // Busy-wait if Thread 2 is in the critical section
+        if (flag[1])
+        {
+            goto wait_for_thread2;
+        }
 
- flag[1]=false;
-}while(1);
+        // Indicate that Thread 1 wants to enter the critical section
+        flag[0] = true;
+
+        // Enter the critical section
+        criticalSection();
+        printf("thread 1 : %d \n", x);
+
+        // Simulate some work in the critical section
+        sleep(1);
+
+        // Indicate that Thread 1 has exited the critical section
+        flag[0] = false;
+
+    } while (x < 10); // Loop until the shared variable reaches 10
 }
 
-int main (void)	
+// Thread 2 function
+void *Thread2(void *arg)
 {
+    do
+    {
+    wait_for_thread1:
+        // Busy-wait if Thread 1 is in the critical section
+        if (flag[0])
+        {
+            goto wait_for_thread1;
+        }
 
-/* Déclaration de variable de type thread */	
-     pthread_t t1;
-     pthread_t t2;
+        // Indicate that Thread 2 wants to enter the critical section
+        flag[1] = true;
 
-/* Création et lancement des threads 1 et 2 */
-	pthread_create (&t1, NULL,Thread1, (void*)NULL);
-	pthread_create (&t2, NULL, Thread2, (void*)NULL); 
-	
-/* Attendre la fin des threads pour terminer le  main */
-     pthread_join (t1, NULL);
-     pthread_join (t2, NULL); 
-	
-	printf("  x= %d",x);
-/* Fin Normale du programme */
-     return 0;
-     }
+        // Enter the critical section
+        criticalSection();
+        printf("thread 2 : %d \n", x);
+
+        // Simulate some work in the critical section
+        sleep(1);
+
+        // Indicate that Thread 2 has exited the critical section
+        flag[1] = false;
+
+    } while (1); // Infinite loop
+}
+
+int main(void)
+{
+    // Declare thread variables
+    pthread_t t1;
+    pthread_t t2;
+
+    // Create and start Thread 1 and Thread 2
+    pthread_create(&t1, NULL, Thread1, (void *)NULL);
+    pthread_create(&t2, NULL, Thread2, (void *)NULL);
+
+    // Wait for both threads to finish
+    pthread_join(t1, NULL);
+    pthread_join(t2, NULL);
+
+    // Print the final value of the shared variable
+    printf("  x= %d", x);
+
+    // Normal program termination
+    return 0;
+}

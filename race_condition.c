@@ -3,39 +3,43 @@
 #include <pthread.h>
 #include <unistd.h>
 
-// Algo 0 - Race condition
+// Shared variable between threads
+int VAL = 0;
 
-
-int VAL = 0; //chouaib
-
-
-void* function(void* args)
+// Function executed by each thread
+void *function(void *args)
 {
-	do{
-		sleep(1);
-		VAL ++ ;
-                printf("=> %s : %d \n",args,VAL);
-        
-       }while(1);
+     do
+     {
+          // Simulate some work with a delay
+          sleep(1);
 
-	pthread_exit(NULL);
+          // Increment the shared variable
+          VAL++;
+
+          // Print the current value of the shared variable and thread name
+          printf("=> %s : %d \n", args, VAL);
+
+     } while (1); // Infinite loop
+
+     // Exit the thread
+     pthread_exit(NULL);
 }
 
-
-int main (void)
+int main(void)
 {
-
-/* Déclaration de variable de type thread */
+     // Declare thread variables
      pthread_t thread1;
      pthread_t thread2;
 
-/* Création et lancement des threads 1 et 2 */
-	pthread_create (&thread1, NULL,function, "Thread 1");
-	pthread_create (&thread2, NULL,function, "Thread 2");
-/* Attendre la fin des threads pour terminer le  main */
-     pthread_join (thread1, NULL);
-     pthread_join (thread2, NULL);
+     // Create and start threads 1 and 2
+     pthread_create(&thread1, NULL, function, "Thread 1");
+     pthread_create(&thread2, NULL, function, "Thread 2");
 
-/* Fin Normale du programme */
+     // Wait for both threads to finish before terminating the main function
+     pthread_join(thread1, NULL);
+     pthread_join(thread2, NULL);
+
+     // Normal program termination
      return 0;
 }
